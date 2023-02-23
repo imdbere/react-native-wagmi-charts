@@ -2,9 +2,9 @@ import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import {
   GestureEvent,
-  LongPressGestureHandler,
-  LongPressGestureHandlerEventPayload,
-  LongPressGestureHandlerProps,
+  PanGestureHandler,
+  PanGestureHandlerProps,
+  PanGestureHandlerEventPayload
 } from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
@@ -17,7 +17,7 @@ import { scaleLinear } from 'd3-scale';
 import { bisectCenter } from 'd3-array';
 import type { Path } from 'react-native-redash';
 
-export type LineChartCursorProps = LongPressGestureHandlerProps & {
+export type LineChartCursorProps = PanGestureHandlerProps & {
   children: React.ReactNode;
   type: 'line' | 'crosshair';
   snapToPoint?: boolean;
@@ -83,7 +83,7 @@ export function LineChartCursor({
   const { currentX, currentIndex, isActive, data, xDomain } = useLineChart();
 
   const onGestureEvent = useAnimatedGestureHandler<
-    GestureEvent<LongPressGestureHandlerEventPayload>
+    GestureEvent<PanGestureHandlerEventPayload>
   >({
     onActive: ({ x }) => {
       if (parsedPath) {
@@ -127,17 +127,18 @@ export function LineChartCursor({
 
   return (
     <CursorContext.Provider value={{ type }}>
-      <LongPressGestureHandler
-        minDurationMs={0}
-        maxDist={999999}
+      <PanGestureHandler
         onGestureEvent={onGestureEvent}
+        activeOffsetY={[-999, 999]}
+        activeOffsetX={[-10, 10]}
+        failOffsetY={[-10, 10]}
         shouldCancelWhenOutside={false}
         {...props}
       >
         <Animated.View style={StyleSheet.absoluteFill}>
           {children}
         </Animated.View>
-      </LongPressGestureHandler>
+      </PanGestureHandler>
     </CursorContext.Provider>
   );
 }

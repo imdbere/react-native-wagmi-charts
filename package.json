@@ -36,6 +36,7 @@
     "android"
   ],
   "dependencies": {
+    "bumbag-native": "^2.7.21",
     "d3-interpolate-path": "^2.2.3",
     "d3-scale": "^2",
     "d3-shape": "^3.0.1",
