@@ -49,7 +49,7 @@ export function CandlestickChartCrosshairTooltip({
   const elementWidth = useSharedValue(0);
 
   const handleLayout = React.useCallback(
-    (event) => {
+    (event: any) => {
       elementHeight.value = event.nativeEvent.layout.height;
       elementWidth.value = event.nativeEvent.layout.width;
     },

@@ -56,7 +56,7 @@ export function LineChartTooltip({
   const elementHeight = useSharedValue(0);
 
   const handleLayout = React.useCallback(
-    (event) => {
+    (event: any) => {
       x.value = event.nativeEvent.layout.x;
       elementWidth.value = event.nativeEvent.layout.width;
       elementHeight.value = event.nativeEvent.layout.height;
