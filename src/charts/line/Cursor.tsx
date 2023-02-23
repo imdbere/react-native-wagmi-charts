@@ -2,9 +2,9 @@ import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import {
   GestureEvent,
-  LongPressGestureHandler,
-  LongPressGestureHandlerEventPayload,
-  LongPressGestureHandlerProps,
+  PanGestureHandler,
+  PanGestureHandlerProps,
+  PanGestureHandlerEventPayload
 } from 'react-native-gesture-handler';
 import Animated, { useAnimatedGestureHandler } from 'react-native-reanimated';
 import { parse } from 'react-native-redash';
@@ -12,7 +12,7 @@ import { parse } from 'react-native-redash';
 import { LineChartDimensionsContext } from './Chart';
 import { useLineChart } from './useLineChart';
 
-export type LineChartCursorProps = LongPressGestureHandlerProps & {
+export type LineChartCursorProps = PanGestureHandlerProps & {
   children: React.ReactNode;
   type: 'line' | 'crosshair';
 };
@@ -37,7 +37,7 @@ export function LineChartCursor({
   );
 
   const onGestureEvent = useAnimatedGestureHandler<
-    GestureEvent<LongPressGestureHandlerEventPayload>
+    GestureEvent<PanGestureHandlerEventPayload>
   >({
     onActive: ({ x }) => {
       if (parsedPath) {
@@ -65,16 +65,18 @@ export function LineChartCursor({
 
   return (
     <CursorContext.Provider value={{ type }}>
-      <LongPressGestureHandler
-        minDurationMs={0}
-        maxDist={999999}
+      <PanGestureHandler
         onGestureEvent={onGestureEvent}
+        activeOffsetY={[-999, 999]}
+        activeOffsetX={[-10, 10]}
+        failOffsetY={[-10, 10]}
+        shouldCancelWhenOutside={false}
         {...props}
       >
         <Animated.View style={StyleSheet.absoluteFill}>
           {children}
         </Animated.View>
-      </LongPressGestureHandler>
+      </PanGestureHandler>
     </CursorContext.Provider>
   );
 }
